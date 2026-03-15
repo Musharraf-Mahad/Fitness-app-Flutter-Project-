@@ -35,8 +35,4 @@ This document contains the test cases used to verify the functionality of the **
 
 ---
 
-# 4. Notes
 
-* All tests should be executed on the Android emulator and a real device if available.
-* Any failed test case should be documented in the bug report file.
-* Test cases should be updated when new features are added.
