@@ -123,7 +123,6 @@ The testing process will produce the following documents:
 * The application runs on Android devices
 * Users have a stable device environment
 
----
 
 ## 8. Conclusion
 
