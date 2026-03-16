@@ -1,4 +1,4 @@
-# FitTrack – Product Vision
+# FitTrack – Product Documentation
 
 ## 1. Product Overview
 
@@ -29,56 +29,110 @@ FitTrack is designed for:
 
 ## 4. Core Features
 
-### User Authentication
+### 4.1 User Authentication
 
-* User login
+The application allows users to create and manage personal accounts.
+
+Features include:
+
 * User registration
-* Secure account management
+* User login
+* Input validation for login and registration forms
+* Secure logout functionality
 
-### Dashboard
+---
 
-* Overview of daily fitness statistics
-* Steps taken today
+### 4.2 Dashboard
+
+The dashboard provides an overview of the user’s daily fitness activity.
+
+Features include:
+
+* Display of daily step count
 * Calories burned
 * Distance covered
-* Quick access to workouts
+* Quick access to workout and step tracker
+* Daily activity summary
 
-### Step Tracker
+---
 
-* Daily step count
-* Progress toward daily step goal
-* Activity visualization
+### 4.3 Step Tracker
 
-### Workout Tracking
+The step tracker allows users to monitor their walking activity and progress toward daily goals.
 
-* Start workout sessions
-* Track workout duration
-* Monitor workout activity
+Features include:
 
-### Goal Management
+* Display of total steps taken
+* Step progress visualization (progress circle)
+* Daily step goal tracking
+* Remaining steps to reach goal
+* Activity chart showing step distribution throughout the day
 
-* Set daily step goals
-* Track progress toward goals
-* Visual goal completion indicators
+---
 
-### Profile Management
+### 4.4 Workout Tracking
 
-* View and edit user profile
-* Personal information management
-* Account settings
+Users can track workout sessions using the workout feature.
+
+Features include:
+
+* Start workout session
+* Stop workout session
+* Display workout duration
+* Track completed workouts
+
+---
+
+### 4.5 Goal Management
+
+The application allows users to set and monitor personal fitness goals.
+
+Features include:
+
+* Set daily step goal
+* Display goal progress
+* Visual goal completion indicator
+
+---
+
+### 4.6 Profile Management
+
+Users can view and manage their personal information.
+
+Features include:
+
+* View user profile information
+* Edit profile details
+* Display personal metrics (height, weight, age)
 * Logout functionality
 
 ---
 
-## 5. Key Value Proposition
+## 5. Application Navigation
 
-FitTrack provides a simple and motivating way for users to monitor their daily activity and stay committed to their fitness goals without the complexity of advanced fitness platforms.
+The application uses a bottom navigation bar to allow users to easily access major sections of the app.
+
+Navigation sections include:
+
+* Dashboard (Home)
+* Steps Tracker
+* Workout
+* Goals
+* Profile
 
 ---
 
-## 6. Success Metrics
+## 6. Key Value Proposition
 
-The success of FitTrack will be measured through:
+FitTrack provides a simple and motivating way for users to monitor their daily activity and stay committed to their fitness goals without the complexity of advanced fitness platforms.
+
+The application focuses on simplicity, usability, and clear fitness progress visualization.
+
+---
+
+## 7. Success Metrics
+
+The success of FitTrack will be evaluated using the following indicators:
 
 * User engagement with step tracking
 * Completion of daily fitness goals
@@ -87,18 +141,19 @@ The success of FitTrack will be measured through:
 
 ---
 
-## 7. Future Improvements
+## 8. Future Improvements
 
 Potential future enhancements include:
 
-* Integration with wearable devices
+* Integration with wearable fitness devices
 * Social fitness challenges
 * Advanced workout analytics
 * Personalized fitness recommendations
+* Activity notifications and reminders
 
 ---
 
-## 8. Product Scope
+## 9. Product Scope
 
 This project focuses on delivering a functional mobile application with essential fitness tracking capabilities including activity monitoring, workout tracking, and goal management.
 
