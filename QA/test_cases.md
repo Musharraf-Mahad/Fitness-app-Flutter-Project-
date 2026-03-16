@@ -23,7 +23,6 @@ This document contains the test cases used to verify the functionality of the **
 | TC11    | Edit Profile     | Update profile information   | Click edit profile and modify data             | Updated information saved                     | Pending |
 | TC12    | Logout           | Logout user                  | Click logout button                            | User is redirected to login screen            | Pending |
 
----
 
 # 3. Test Case Status Legend
 
