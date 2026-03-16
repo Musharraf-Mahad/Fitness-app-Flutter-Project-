@@ -109,7 +109,6 @@ The testing process will produce the following documents:
 * Bug Reports
 * Test Results
 
----
 
 ## 7. Risks and Assumptions
 
