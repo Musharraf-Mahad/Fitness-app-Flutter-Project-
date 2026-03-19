@@ -6,4 +6,4 @@ Frontend Developer – Mushraf
 
 UI Designer – Fasika
 
-Testing & QA – Abdulhaie
+Testing & QA – Abdulhaie and ishak
