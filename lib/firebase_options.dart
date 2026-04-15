@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         return windows;
       case TargetPlatform.linux:
@@ -40,48 +43,40 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBUvcCIHoi6l8RjdnLS-60Y97wKMDxSJWI',
+    appId: '1:1078071122277:web:0603e2e4080aacb900298c',
+    messagingSenderId: '1078071122277',
+    projectId: 'fitness-app-bc7a5',
+    authDomain: 'fitness-app-bc7a5.firebaseapp.com',
+    storageBucket: 'fitness-app-bc7a5.firebasestorage.app',
+    measurementId: 'G-SDL48DDX42',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDyHr43kATsuh5c8yxtsnSZwMUafaza85s',
-    appId: '1:58661381064:android:9f2bc244712dfab79b16fd',
-    messagingSenderId: '58661381064',
-    projectId: 'fittrack-f1c0d',
-    storageBucket: 'fittrack-f1c0d.firebasestorage.app',
+    apiKey: 'AIzaSyDgUcEXo47_Pdy3szWXq_2osDBibEtdhJ4',
+    appId: '1:1078071122277:android:1a2a7ab202e4f72c00298c',
+    messagingSenderId: '1078071122277',
+    projectId: 'fitness-app-bc7a5',
+    storageBucket: 'fitness-app-bc7a5.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCsmCTsYPp6cm3QX8xDrj20y0WRPMd1FRc',
-    appId: '1:58661381064:ios:b1918f447a75411b9b16fd',
-    messagingSenderId: '58661381064',
-    projectId: 'fittrack-f1c0d',
-    storageBucket: 'fittrack-f1c0d.firebasestorage.app',
-    iosBundleId: 'com.example.fitnessApp',
-  );
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAMenGtRdFu-S2jvTWaJ9G3tnjwuhYyHqQ',
-    appId: '1:58661381064:web:9dc527c0c9782a419b16fd',
-    messagingSenderId: '58661381064',
-    projectId: 'fittrack-f1c0d',
-    authDomain: 'fittrack-f1c0d.firebaseapp.com',
-    storageBucket: 'fittrack-f1c0d.firebasestorage.app',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCsmCTsYPp6cm3QX8xDrj20y0WRPMd1FRc',
-    appId: '1:58661381064:ios:b1918f447a75411b9b16fd',
-    messagingSenderId: '58661381064',
-    projectId: 'fittrack-f1c0d',
-    storageBucket: 'fittrack-f1c0d.firebasestorage.app',
+    apiKey: 'AIzaSyDZEvHy1eaerzhaTrlJOdXZjLrLjbDifgM',
+    appId: '1:1078071122277:ios:ff65ff50b7e5675400298c',
+    messagingSenderId: '1078071122277',
+    projectId: 'fitness-app-bc7a5',
+    storageBucket: 'fitness-app-bc7a5.firebasestorage.app',
     iosBundleId: 'com.example.fitnessApp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAMenGtRdFu-S2jvTWaJ9G3tnjwuhYyHqQ',
-    appId: '1:58661381064:web:92da0f60846a7fbc9b16fd',
-    messagingSenderId: '58661381064',
-    projectId: 'fittrack-f1c0d',
-    authDomain: 'fittrack-f1c0d.firebaseapp.com',
-    storageBucket: 'fittrack-f1c0d.firebasestorage.app',
+    apiKey: 'AIzaSyBUvcCIHoi6l8RjdnLS-60Y97wKMDxSJWI',
+    appId: '1:1078071122277:web:251edefd380adc4900298c',
+    messagingSenderId: '1078071122277',
+    projectId: 'fitness-app-bc7a5',
+    authDomain: 'fitness-app-bc7a5.firebaseapp.com',
+    storageBucket: 'fitness-app-bc7a5.firebasestorage.app',
+    measurementId: 'G-BPZEDRYHQ9',
   );
-
 }
