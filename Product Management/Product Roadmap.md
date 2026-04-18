@@ -16,18 +16,18 @@ The roadmap helps organize the project timeline and ensures that development pro
 
 Activities:
 
-* Define product vision and goals
-* Identify target users
-* List core features
-* Create project documentation
-* Set up GitHub repository structure
+- Define product vision and goals
+- Identify target users
+- List core features
+- Create project documentation
+- Set up GitHub repository structure
 
 Deliverables:
 
-* Product documentation
-* Feature list
-* Project roadmap
-* Repository setup
+- Product documentation
+- Feature list
+- Project roadmap
+- Repository setup
 
 ---
 
@@ -37,28 +37,28 @@ Deliverables:
 
 Activities:
 
-* Create wireframes for all screens
-* Design user interface layouts
-* Define design system (colors, typography)
-* Create navigation flow
-* Finalize screen designs
+- Create wireframes for all screens
+- Design user interface layouts
+- Define design system (colors, typography)
+- Create navigation flow
+- Finalize screen designs
 
 Screens Designed:
 
-* Splash Screen
-* Login Screen
-* Register Screen
-* Dashboard Screen
-* Step Tracker Screen
-* Workout Screen
-* Goals Screen
-* Profile Screen
+- Splash Screen
+- Login Screen
+- Register Screen
+- Dashboard Screen
+- Step Tracker Screen
+- Workout Screen
+- Goals Screen
+- Profile Screen
 
 Deliverables:
 
-* UI design images
-* Navigation flow diagram
-* Design documentation
+- UI design images
+- Navigation flow diagram
+- Design documentation
 
 ---
 
@@ -68,18 +68,18 @@ Deliverables:
 
 Activities:
 
-* Set up Flutter project structure
-* Implement authentication screens
-* Build dashboard interface
-* Develop step tracker functionality
-* Implement workout tracking
-* Add goal management features
-* Create profile management screen
+- Set up Flutter project structure
+- Implement authentication screens
+- Build dashboard interface
+- Develop step tracker functionality
+- Implement workout tracking
+- Add goal management features
+- Create profile management screen
 
 Deliverables:
 
-* Functional mobile application
-* Source code implementation
+- Functional mobile application
+- Source code implementation
 
 ---
 
@@ -89,17 +89,17 @@ Deliverables:
 
 Activities:
 
-* Create test plan
-* Write test cases
-* Perform functional testing
-* Test navigation and UI behavior
-* Identify and document bugs
+- Create test plan
+- Write test cases
+- Perform functional testing
+- Test navigation and UI behavior
+- Identify and document bugs
 
 Deliverables:
 
-* Test documentation
-* Bug reports
-* Test results
+- Test documentation
+- Bug reports
+- Test results
 
 ---
 
@@ -109,17 +109,17 @@ Deliverables:
 
 Activities:
 
-* Fix remaining issues
-* Improve UI consistency
-* Final code cleanup
-* Update project documentation
-* Prepare presentation or demo
+- Fix remaining issues
+- Improve UI consistency
+- Final code cleanup
+- Update project documentation
+- Prepare presentation or demo
 
 Deliverables:
 
-* Final application version
-* Completed documentation
-* GitHub project repository
+- Final application version
+- Completed documentation
+- GitHub project repository
 
 ---
 
