@@ -20,10 +20,10 @@ FitTrack aims to make fitness monitoring easy, visually engaging, and useful for
 
 FitTrack is designed for:
 
-* Individuals who want to track their daily steps
-* Users beginning their fitness journey
-* People who want to monitor workouts and physical activity
-* Anyone who wants to set and track fitness goals
+- Individuals who want to track their daily steps
+- Users beginning their fitness journey
+- People who want to monitor workouts and physical activity
+- Anyone who wants to set and track fitness goals
 
 ---
 
@@ -35,10 +35,10 @@ The application allows users to create and manage personal accounts.
 
 Features include:
 
-* User registration
-* User login
-* Input validation for login and registration forms
-* Secure logout functionality
+- User registration
+- User login
+- Input validation for login and registration forms
+- Secure logout functionality
 
 ---
 
@@ -48,11 +48,11 @@ The dashboard provides an overview of the user’s daily fitness activity.
 
 Features include:
 
-* Display of daily step count
-* Calories burned
-* Distance covered
-* Quick access to workout and step tracker
-* Daily activity summary
+- Display of daily step count
+- Calories burned
+- Distance covered
+- Quick access to workout and step tracker
+- Daily activity summary
 
 ---
 
@@ -62,11 +62,11 @@ The step tracker allows users to monitor their walking activity and progress tow
 
 Features include:
 
-* Display of total steps taken
-* Step progress visualization (progress circle)
-* Daily step goal tracking
-* Remaining steps to reach goal
-* Activity chart showing step distribution throughout the day
+- Display of total steps taken
+- Step progress visualization (progress circle)
+- Daily step goal tracking
+- Remaining steps to reach goal
+- Activity chart showing step distribution throughout the day
 
 ---
 
@@ -76,10 +76,10 @@ Users can track workout sessions using the workout feature.
 
 Features include:
 
-* Start workout session
-* Stop workout session
-* Display workout duration
-* Track completed workouts
+- Start workout session
+- Stop workout session
+- Display workout duration
+- Track completed workouts
 
 ---
 
@@ -89,9 +89,9 @@ The application allows users to set and monitor personal fitness goals.
 
 Features include:
 
-* Set daily step goal
-* Display goal progress
-* Visual goal completion indicator
+- Set daily step goal
+- Display goal progress
+- Visual goal completion indicator
 
 ---
 
@@ -101,10 +101,10 @@ Users can view and manage their personal information.
 
 Features include:
 
-* View user profile information
-* Edit profile details
-* Display personal metrics (height, weight, age)
-* Logout functionality
+- View user profile information
+- Edit profile details
+- Display personal metrics (height, weight, age)
+- Logout functionality
 
 ---
 
@@ -114,11 +114,13 @@ The application uses a bottom navigation bar to allow users to easily access maj
 
 Navigation sections include:
 
-* Dashboard 
-* Steps Tracker
-* Workout
-* Goals
-* Profile
+<<<<<<< HEAD:Product Management/About Product.md
+
+- Dashboard (Home)
+- Steps Tracker
+- Workout
+- Goals
+- Profile
 
 ---
 
@@ -134,10 +136,10 @@ The application focuses on simplicity, usability, and clear fitness progress vis
 
 The success of FitTrack will be evaluated using the following indicators:
 
-* User engagement with step tracking
-* Completion of daily fitness goals
-* Consistent workout tracking
-* User satisfaction with the application interface
+- User engagement with step tracking
+- Completion of daily fitness goals
+- Consistent workout tracking
+- User satisfaction with the application interface
 
 ---
 
@@ -145,12 +147,21 @@ The success of FitTrack will be evaluated using the following indicators:
 
 Potential future enhancements include:
 
+<<<<<<< HEAD:Product Management/About Product.md
+
+- Integration with wearable fitness devices
+- Social fitness challenges
+- Advanced workout analytics
+- Personalized fitness recommendations
+- # Activity notifications and reminders
+
 * Integration with wearable fitness devices
 * Social fitness challenges
 * Advanced workout analytics
 * Personalized fitness recommendations
 * Activity notifications and reminders
 * Integration with AI
+  > > > > > > > 16b2e27c17ee20d8f4d9690806a5485e238a1b81:docs/Product Management/About Product.md
 
 ---
 
