@@ -155,14 +155,6 @@ Potential future enhancements include:
 - Personalized fitness recommendations
 - # Activity notifications and reminders
 
-* Integration with wearable fitness devices
-* Social fitness challenges
-* Advanced workout analytics
-* Personalized fitness recommendations
-* Activity notifications and reminders
-* Integration with AI
-  > > > > > > > 16b2e27c17ee20d8f4d9690806a5485e238a1b81:docs/Product Management/About Product.md
-
 ---
 
 ## 9. Product Scope
