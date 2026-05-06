@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final VoidCallback? onBack; // ✅ ADD THIS
+  final VoidCallback? onBack;
 
   const ProfileScreen({super.key, this.onBack});
 
@@ -16,12 +16,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String name = "";
   String email = "";
 
+  String height = "";
+  String weight = "";
+  String age = "";
+
   @override
   void initState() {
     super.initState();
     loadUserData();
   }
 
+  // 🔷 LOAD USER DATA
   Future<void> loadUserData() async {
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -31,17 +36,129 @@ class _ProfileScreenState extends State<ProfileScreen> {
         .get();
 
     setState(() {
-      name = doc["name"];
-      email = doc["email"];
+      name = doc["name"] ?? "";
+      email = doc["email"] ?? "";
+
+      height = doc["height"] ?? "";
+      weight = doc["weight"] ?? "";
+      age = doc["age"] ?? "";
     });
   }
 
+  // 🔷 LOGOUT
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
 
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const LoginScreen()),
+    );
+  }
+
+  // 🔷 EDIT PROFILE
+  Future<void> editProfile() async {
+    final nameController =
+        TextEditingController(text: name);
+
+    final heightController =
+        TextEditingController(text: height);
+
+    final weightController =
+        TextEditingController(text: weight);
+
+    final ageController =
+        TextEditingController(text: age);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Edit Profile"),
+
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                // NAME
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: "Name",
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // HEIGHT
+                TextField(
+                  controller: heightController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "Height (cm)",
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // WEIGHT
+                TextField(
+                  controller: weightController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "Weight (kg)",
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // AGE
+                TextField(
+                  controller: ageController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "Age",
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          actions: [
+
+            // CANCEL
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancel"),
+            ),
+
+            // SAVE
+            ElevatedButton(
+              onPressed: () async {
+                final uid =
+                    FirebaseAuth.instance.currentUser!.uid;
+
+                await FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(uid)
+                    .update({
+                  "name": nameController.text.trim(),
+                  "height": heightController.text.trim(),
+                  "weight": weightController.text.trim(),
+                  "age": ageController.text.trim(),
+                });
+
+                loadUserData();
+
+                Navigator.pop(context);
+              },
+              child: const Text("Save"),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -53,32 +170,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
+
           child: Column(
             children: [
 
               // 🔷 TOP BAR
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+
                 children: [
+
+                  // BACK
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
 
-                    // 🔥 FIXED BACK BUTTON
                     onPressed: () {
                       if (widget.onBack != null) {
-                        widget.onBack!(); // switch tab
+                        widget.onBack!();
                       } else {
                         Navigator.pop(context);
                       }
                     },
                   ),
 
+                  // TITLE
                   const Text(
                     "Profile",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
 
+                  // SETTINGS
                   IconButton(
                     icon: const Icon(Icons.settings),
                     onPressed: () {},
@@ -91,20 +216,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // 🔷 PROFILE IMAGE
               Stack(
                 alignment: Alignment.bottomRight,
+
                 children: [
+
                   const CircleAvatar(
                     radius: 60,
-                    backgroundImage:
-                        NetworkImage("https://i.pravatar.cc/150?img=3"),
+                    backgroundImage: NetworkImage(
+                      "https://i.pravatar.cc/150?img=3",
+                    ),
                   ),
+
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.blue,
                       shape: BoxShape.circle,
                     ),
+
                     child: IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.white),
-                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      onPressed: editProfile,
                     ),
                   )
                 ],
@@ -112,16 +245,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 20),
 
-              // 🔷 NAME + EMAIL
+              // 🔷 NAME
               Text(
                 name.isEmpty ? "Loading..." : name,
+
                 style: const TextStyle(
-                    fontSize: 26, fontWeight: FontWeight.bold),
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+
               const SizedBox(height: 5),
+
+              // 🔷 EMAIL
               Text(
                 email,
-                style: const TextStyle(color: Colors.grey),
+                style: const TextStyle(
+                  color: Colors.grey,
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -130,12 +271,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
+
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                    borderRadius:
+                        BorderRadius.circular(30),
+                  ),
+
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 12,
+                  ),
                 ),
-                onPressed: () {},
+
+                onPressed: editProfile,
+
                 child: const Text("Edit Profile"),
               ),
 
@@ -144,12 +293,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // 🔷 PERSONAL INFO
               sectionCard(
                 title: "PERSONAL INFORMATION",
+
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children:  [
-                    infoItem("Height", "175 cm"),
-                    infoItem("Weight", "70 kg"),
-                    infoItem("Age", "22 yrs"),
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceAround,
+
+                  children: [
+
+                    infoItem(
+                      "Height",
+                      height.isEmpty
+                          ? "--"
+                          : "$height cm",
+                    ),
+
+                    infoItem(
+                      "Weight",
+                      weight.isEmpty
+                          ? "--"
+                          : "$weight kg",
+                    ),
+
+                    infoItem(
+                      "Age",
+                      age.isEmpty
+                          ? "--"
+                          : "$age yrs",
+                    ),
                   ],
                 ),
               ),
@@ -159,13 +329,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // 🔷 SETTINGS
               sectionCard(
                 title: "ACCOUNT SETTINGS",
+
                 child: Column(
-                  children:  [
-                    settingItem(Icons.lock, "Change Password"),
+                  children: const [
+
+                    ListTile(
+                      leading: Icon(
+                        Icons.lock,
+                        color: Colors.grey,
+                      ),
+                      title: Text("Change Password"),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                      ),
+                    ),
+
                     Divider(),
-                    settingItem(Icons.notifications, "Notification Settings"),
+
+                    ListTile(
+                      leading: Icon(
+                        Icons.notifications,
+                        color: Colors.grey,
+                      ),
+                      title:
+                          Text("Notification Settings"),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                      ),
+                    ),
+
                     Divider(),
-                    settingItem(Icons.security, "Privacy Settings"),
+
+                    ListTile(
+                      leading: Icon(
+                        Icons.security,
+                        color: Colors.grey,
+                      ),
+                      title: Text("Privacy Settings"),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -176,15 +383,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 55,
+
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
+
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
+                      borderRadius:
+                          BorderRadius.circular(30),
+                    ),
                   ),
+
                   onPressed: logout,
-                  child: const Text("Logout",
-                      style: TextStyle(fontSize: 18)),
+
+                  child: const Text(
+                    "Logout",
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
             ],
@@ -195,21 +410,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // 🔹 SECTION CARD
-  Widget sectionCard({required String title, required Widget child}) {
+  Widget sectionCard({
+    required String title,
+    required Widget child,
+  }) {
     return Container(
       width: double.infinity,
+
       padding: const EdgeInsets.all(20),
+
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
+
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
+
         children: [
-          Text(title,
-              style: const TextStyle(
-                  color: Colors.grey, fontWeight: FontWeight.bold)),
+
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
           const SizedBox(height: 15),
+
           child,
         ],
       ),
@@ -217,26 +447,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // 🔹 INFO ITEM
-  static Widget infoItem(String title, String value) {
+  Widget infoItem(String title, String value) {
     return Column(
       children: [
-        Text(title, style: const TextStyle(color: Colors.grey)),
-        const SizedBox(height: 5),
-        Text(value,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.blue)),
-      ],
-    );
-  }
 
-  // 🔹 SETTINGS ITEM
-  static Widget settingItem(IconData icon, String title) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.grey),
-      title: Text(title),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+
+        const SizedBox(height: 5),
+
+        Text(
+          value,
+
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Colors.blue,
+          ),
+        ),
+      ],
     );
   }
 }
