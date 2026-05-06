@@ -51,7 +51,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      MaterialPageRoute(
+        builder: (_) => const LoginScreen(),
+      ),
     );
   }
 
@@ -162,6 +164,145 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // 🔷 CHANGE PASSWORD
+  Future<void> changePassword() async {
+    final currentPasswordController =
+        TextEditingController();
+
+    final newPasswordController =
+        TextEditingController();
+
+    final confirmPasswordController =
+        TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Change Password"),
+
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                // CURRENT PASSWORD
+                TextField(
+                  controller:
+                      currentPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: "Current Password",
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // NEW PASSWORD
+                TextField(
+                  controller: newPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: "New Password",
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // CONFIRM PASSWORD
+                TextField(
+                  controller:
+                      confirmPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: "Confirm Password",
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          actions: [
+
+            // CANCEL
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancel"),
+            ),
+
+            // UPDATE
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  final user =
+                      FirebaseAuth.instance.currentUser!;
+
+                  // PASSWORD MATCH CHECK
+                  if (newPasswordController.text !=
+                      confirmPasswordController
+                          .text) {
+
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            "Passwords do not match"),
+                      ),
+                    );
+
+                    return;
+                  }
+
+                  // REAUTHENTICATE
+                  AuthCredential credential =
+                      EmailAuthProvider.credential(
+                    email: user.email!,
+                    password:
+                        currentPasswordController
+                            .text
+                            .trim(),
+                  );
+
+                  await user
+                      .reauthenticateWithCredential(
+                          credential);
+
+                  // UPDATE PASSWORD
+                  await user.updatePassword(
+                    newPasswordController.text.trim(),
+                  );
+
+                  Navigator.pop(context);
+
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          "Password updated successfully"),
+                    ),
+                  );
+
+                } catch (e) {
+
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          "Failed to update password"),
+                    ),
+                  );
+                }
+              },
+              child: const Text("Update"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,7 +322,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 children: [
 
-                  // BACK
+                  // BACK BUTTON
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
 
@@ -203,7 +344,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
 
-                  // SETTINGS
+                  // SETTINGS ICON
                   IconButton(
                     icon: const Icon(Icons.settings),
                     onPressed: () {},
@@ -239,7 +380,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       onPressed: editProfile,
                     ),
-                  )
+                  ),
                 ],
               ),
 
@@ -326,52 +467,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 20),
 
-              // 🔷 SETTINGS
+              // 🔷 ACCOUNT SETTINGS
               sectionCard(
                 title: "ACCOUNT SETTINGS",
 
                 child: Column(
-                  children: const [
+                  children: [
 
                     ListTile(
-                      leading: Icon(
+                      leading: const Icon(
                         Icons.lock,
                         color: Colors.grey,
                       ),
-                      title: Text("Change Password"),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      ),
-                    ),
 
-                    Divider(),
-
-                    ListTile(
-                      leading: Icon(
-                        Icons.notifications,
-                        color: Colors.grey,
-                      ),
                       title:
-                          Text("Notification Settings"),
-                      trailing: Icon(
+                          const Text("Change Password"),
+
+                      trailing: const Icon(
                         Icons.arrow_forward_ios,
                         size: 16,
                       ),
-                    ),
 
-                    Divider(),
-
-                    ListTile(
-                      leading: Icon(
-                        Icons.security,
-                        color: Colors.grey,
-                      ),
-                      title: Text("Privacy Settings"),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      ),
+                      onTap: changePassword,
                     ),
                   ],
                 ),
