@@ -22,53 +22,15 @@ class _DashboardScreenState
   int calories = 0;
   double distance = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    loadUserData();
-  }
-
-  // 🔷 LOAD FIRESTORE DATA
-  Future<void> loadUserData() async {
+  // 🔷 REALTIME USER STREAM
+  Stream<DocumentSnapshot> getUserStream() {
     final uid =
         FirebaseAuth.instance.currentUser!.uid;
 
-    final docRef =
-        FirebaseFirestore.instance
-            .collection("users")
-            .doc(uid);
-
-    final doc = await docRef.get();
-
-    if (!doc.exists) return;
-
-    // DEFAULT VALUES
-    if (!doc.data()!.containsKey("goal")) {
-      await docRef.update({
-        "goal": 8000,
-        "steps": 0,
-        "calories": 0,
-        "distance": 0.0,
-      });
-    }
-
-    final updatedDoc = await docRef.get();
-
-    setState(() {
-      name = updatedDoc["name"] ?? "";
-      email = updatedDoc["email"] ?? "";
-
-      goal = updatedDoc["goal"] ?? 8000;
-
-      steps = updatedDoc["steps"] ?? 0;
-
-      calories =
-          updatedDoc["calories"] ?? 0;
-
-      distance =
-          (updatedDoc["distance"] ?? 0)
-              .toDouble();
-    });
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .snapshots();
   }
 
   // 🔵 ADD STEPS
@@ -96,13 +58,6 @@ class _DashboardScreenState
       "distance": newDistance,
       "calories": newCalories,
     });
-
-    // 🔥 UPDATE UI
-    setState(() {
-      steps = newSteps;
-      distance = newDistance;
-      calories = newCalories;
-    });
   }
 
   // 🔴 RESET STEPS
@@ -120,441 +75,462 @@ class _DashboardScreenState
       "distance": 0,
       "calories": 0,
     });
-
-    setState(() {
-      steps = 0;
-      distance = 0;
-      calories = 0;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    double progress =
-        goal == 0 ? 0 : steps / goal;
-
-    if (progress > 1) progress = 1;
-
     return Scaffold(
       backgroundColor:
           const Color(0xFFF5F6FA),
 
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding:
-              const EdgeInsets.all(20),
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: getUserStream(),
 
-          child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+        builder: (context, snapshot) {
 
-            children: [
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-              // 🔷 HEADER
-              Row(
-                mainAxisAlignment:
-                    MainAxisAlignment
-                        .spaceBetween,
+          final data =
+              snapshot.data!.data()
+                  as Map<String, dynamic>;
+
+          name = data["name"] ?? "";
+          email = data["email"] ?? "";
+
+          goal = data["goal"] ?? 8000;
+
+          steps = data["steps"] ?? 0;
+
+          calories =
+              data["calories"] ?? 0;
+
+          distance =
+              (data["distance"] ?? 0)
+                  .toDouble();
+
+          double progress =
+              goal == 0 ? 0 : steps / goal;
+
+          if (progress > 1) progress = 1;
+
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding:
+                  const EdgeInsets.all(20),
+
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
 
                 children: [
 
+                  // 🔷 HEADER
                   Row(
-                    children: const [
+                    mainAxisAlignment:
+                        MainAxisAlignment
+                            .spaceBetween,
 
-                      Icon(
-                        Icons.directions_walk,
-                        color: Colors.blue,
+                    children: [
+
+                      Row(
+                        children: const [
+
+                          Icon(
+                            Icons.directions_walk,
+                            color: Colors.blue,
+                          ),
+
+                          SizedBox(width: 10),
+
+                          Text(
+                            "FitTrack",
+
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight:
+                                  FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
 
-                      SizedBox(width: 10),
+                      // PROFILE IMAGE
+                      const CircleAvatar(
+                        radius: 20,
 
-                      Text(
-                        "FitTrack",
-
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight:
-                              FontWeight.bold,
+                        backgroundImage:
+                            NetworkImage(
+                          "https://i.pravatar.cc/150?img=3",
                         ),
                       ),
                     ],
                   ),
 
-                  // PROFILE IMAGE
-                  const CircleAvatar(
-                    radius: 20,
+                  const SizedBox(height: 20),
 
-                    backgroundImage:
-                        NetworkImage(
-                      "https://i.pravatar.cc/150?img=3",
-                    ),
-                  ),
-                ],
-              ),
+                  const Text(
+                    "Good Morning,",
 
-              const SizedBox(height: 20),
-
-              const Text(
-                "Good Morning,",
-
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-
-              const SizedBox(height: 5),
-
-              // USER NAME
-              Text(
-                name.isEmpty
-                    ? "Loading..."
-                    : name,
-
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight:
-                      FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              // 🔷 STEPS CARD
-              Container(
-                padding:
-                    const EdgeInsets.all(20),
-
-                decoration: BoxDecoration(
-                  color: Colors.white,
-
-                  borderRadius:
-                      BorderRadius.circular(
-                          20),
-                ),
-
-                child: Column(
-                  children: [
-
-                    // TOP ROW
-                    Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceBetween,
-
-                      children: [
-
-                        Row(
-                          children: const [
-
-                            Icon(
-                              Icons
-                                  .directions_walk,
-                              color:
-                                  Colors.blue,
-                            ),
-
-                            SizedBox(width: 10),
-
-                            Text(
-                              "Today's Steps",
-
-                              style: TextStyle(
-                                fontWeight:
-                                    FontWeight
-                                        .bold,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        Container(
-                          padding:
-                              const EdgeInsets
-                                  .symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-
-                          decoration:
-                              BoxDecoration(
-                            color: Colors.blue
-                                .withOpacity(
-                                    0.1),
-
-                            borderRadius:
-                                BorderRadius
-                                    .circular(
-                                        20),
-                          ),
-
-                          child: Text(
-                            "Goal: $goal",
-
-                            style:
-                                const TextStyle(
-                              color:
-                                  Colors.blue,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 25),
-
-                    // 🔷 PROGRESS
-                    Stack(
-                      alignment:
-                          Alignment.center,
-
-                      children: [
-
-                        SizedBox(
-                          width: 150,
-                          height: 150,
-
-                          child:
-                              CircularProgressIndicator(
-                            value: progress,
-
-                            strokeWidth: 10,
-
-                            backgroundColor:
-                                Colors.grey
-                                    .shade200,
-
-                            color: Colors.blue,
-                          ),
-                        ),
-
-                        Column(
-                          children: [
-
-                            Text(
-                              "$steps",
-
-                              style:
-                                  const TextStyle(
-                                fontSize: 28,
-
-                                fontWeight:
-                                    FontWeight
-                                        .bold,
-                              ),
-                            ),
-
-                            const Text(
-                              "STEPS",
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // BOTTOM INFO
-                    Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceBetween,
-
-                      children: [
-
-                        Text(
-                          "${(progress * 100).toInt()}% completed",
-
-                          style:
-                              const TextStyle(
-                            color:
-                                Colors.grey,
-                          ),
-                        ),
-
-                        Text(
-                          "${goal - steps} to go",
-
-                          style:
-                              const TextStyle(
-                            color:
-                                Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // 🔷 BUTTONS
-              Row(
-                children: [
-
-                  // ADD BUTTON
-                  Expanded(
-                    child: SizedBox(
-                      height: 50,
-
-                      child:
-                          ElevatedButton.icon(
-                        style:
-                            ElevatedButton
-                                .styleFrom(
-                          backgroundColor:
-                              Colors.blue,
-
-                          shape:
-                              RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius
-                                    .circular(
-                                        20),
-                          ),
-                        ),
-
-                        onPressed: addSteps,
-
-                        icon: const Icon(
-                          Icons.add,
-                        ),
-
-                        label: const Text(
-                          "Add 500",
-                        ),
-                      ),
+                    style: TextStyle(
+                      color: Colors.grey,
                     ),
                   ),
 
-                  const SizedBox(width: 15),
+                  const SizedBox(height: 5),
 
-                  // RESET BUTTON
-                  Expanded(
-                    child: SizedBox(
-                      height: 50,
+                  // USER NAME
+                  Text(
+                    name.isEmpty
+                        ? "Loading..."
+                        : name,
 
-                      child:
-                          ElevatedButton.icon(
-                        style:
-                            ElevatedButton
-                                .styleFrom(
-                          backgroundColor:
-                              Colors.grey,
-
-                          shape:
-                              RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius
-                                    .circular(
-                                        20),
-                          ),
-                        ),
-
-                        onPressed:
-                            resetSteps,
-
-                        icon: const Icon(
-                          Icons.refresh,
-                        ),
-
-                        label: const Text(
-                          "Reset",
-                        ),
-                      ),
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight:
+                          FontWeight.bold,
                     ),
                   ),
-                ],
-              ),
 
-              const SizedBox(height: 15),
+                  const SizedBox(height: 25),
 
-              // 🔷 GOAL BUTTON
-              SizedBox(
-                width: double.infinity,
-                height: 50,
+                  // 🔷 STEPS CARD
+                  Container(
+                    padding:
+                        const EdgeInsets.all(20),
 
-                child:
-                    ElevatedButton.icon(
-                  style:
-                      ElevatedButton
-                          .styleFrom(
-                    backgroundColor:
-                        Colors.blue,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
 
-                    shape:
-                        RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(
                               20),
                     ),
+
+                    child: Column(
+                      children: [
+
+                        // TOP ROW
+                        Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment
+                                  .spaceBetween,
+
+                          children: [
+
+                            Row(
+                              children: const [
+
+                                Icon(
+                                  Icons
+                                      .directions_walk,
+                                  color:
+                                      Colors.blue,
+                                ),
+
+                                SizedBox(width: 10),
+
+                                Text(
+                                  "Today's Steps",
+
+                                  style:
+                                      TextStyle(
+                                    fontWeight:
+                                        FontWeight
+                                            .bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            Container(
+                              padding:
+                                  const EdgeInsets
+                                      .symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+
+                              decoration:
+                                  BoxDecoration(
+                                color: Colors.blue
+                                    .withOpacity(
+                                        0.1),
+
+                                borderRadius:
+                                    BorderRadius
+                                        .circular(
+                                            20),
+                              ),
+
+                              child: Text(
+                                "Goal: $goal",
+
+                                style:
+                                    const TextStyle(
+                                  color:
+                                      Colors.blue,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 25),
+
+                        // 🔷 PROGRESS
+                        Stack(
+                          alignment:
+                              Alignment.center,
+
+                          children: [
+
+                            SizedBox(
+                              width: 150,
+                              height: 150,
+
+                              child:
+                                  CircularProgressIndicator(
+                                value: progress,
+
+                                strokeWidth: 10,
+
+                                backgroundColor:
+                                    Colors.grey
+                                        .shade200,
+
+                                color:
+                                    Colors.blue,
+                              ),
+                            ),
+
+                            Column(
+                              children: [
+
+                                Text(
+                                  "$steps",
+
+                                  style:
+                                      const TextStyle(
+                                    fontSize: 28,
+
+                                    fontWeight:
+                                        FontWeight
+                                            .bold,
+                                  ),
+                                ),
+
+                                const Text(
+                                  "STEPS",
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // BOTTOM INFO
+                        Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment
+                                  .spaceBetween,
+
+                          children: [
+
+                            Text(
+                              "${(progress * 100).toInt()}% completed",
+
+                              style:
+                                  const TextStyle(
+                                color:
+                                    Colors.grey,
+                              ),
+                            ),
+
+                            Text(
+                              "${goal - steps} to go",
+
+                              style:
+                                  const TextStyle(
+                                color:
+                                    Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
 
-                  onPressed: () async {
+                  const SizedBox(height: 20),
 
-                    final result =
-                        await Navigator.push(
-                      context,
+                  // 🔷 BUTTONS
+                  Row(
+                    children: [
 
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            const GoalsScreen(),
+                      // ADD BUTTON
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+
+                          child:
+                              ElevatedButton.icon(
+                            style:
+                                ElevatedButton
+                                    .styleFrom(
+                              backgroundColor:
+                                  Colors.blue,
+
+                              shape:
+                                  RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius
+                                        .circular(
+                                            20),
+                              ),
+                            ),
+
+                            onPressed:
+                                addSteps,
+
+                            icon: const Icon(
+                              Icons.add,
+                            ),
+
+                            label: const Text(
+                              "Add 500",
+                            ),
+                          ),
+                        ),
                       ),
-                    );
 
-                    if (result == true) {
-                      loadUserData();
-                    }
-                  },
+                      const SizedBox(width: 15),
 
-                  icon: const Icon(
-                    Icons.flag,
+                      // RESET BUTTON
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+
+                          child:
+                              ElevatedButton.icon(
+                            style:
+                                ElevatedButton
+                                    .styleFrom(
+                              backgroundColor:
+                                  Colors.grey,
+
+                              shape:
+                                  RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius
+                                        .circular(
+                                            20),
+                              ),
+                            ),
+
+                            onPressed:
+                                resetSteps,
+
+                            icon: const Icon(
+                              Icons.refresh,
+                            ),
+
+                            label: const Text(
+                              "Reset",
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
 
-                  label: const Text(
-                    "Edit Goal",
-                  ),
-                ),
-              ),
+                  const SizedBox(height: 15),
 
-              const SizedBox(height: 20),
+                  // 🔷 GOAL BUTTON
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
 
-              // 🔷 CALORIES + DISTANCE
-              Row(
-                children: [
+                    child:
+                        ElevatedButton.icon(
+                      style:
+                          ElevatedButton
+                              .styleFrom(
+                        backgroundColor:
+                            Colors.blue,
 
-                  Expanded(
-                    child: infoCard(
-                      Icons
-                          .local_fire_department,
+                        shape:
+                            RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(
+                                  20),
+                        ),
+                      ),
 
-                      "CALORIES",
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
 
-                      "$calories kcal",
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const GoalsScreen(),
+                          ),
+                        );
+                      },
 
-                      Colors.orange,
+                      icon: const Icon(
+                        Icons.flag,
+                      ),
+
+                      label: const Text(
+                        "Edit Goal",
+                      ),
                     ),
                   ),
 
-                  const SizedBox(width: 15),
+                  const SizedBox(height: 20),
 
-                  Expanded(
-                    child: infoCard(
-                      Icons.location_on,
+                  // 🔷 CALORIES + DISTANCE
+                  Row(
+                    children: [
 
-                      "DISTANCE",
+                      Expanded(
+                        child: infoCard(
+                          Icons
+                              .local_fire_department,
 
-                      "${distance.toStringAsFixed(1)} km",
+                          "CALORIES",
 
-                      Colors.blue,
-                    ),
+                          "$calories kcal",
+
+                          Colors.orange,
+                        ),
+                      ),
+
+                      const SizedBox(width: 15),
+
+                      Expanded(
+                        child: infoCard(
+                          Icons.location_on,
+
+                          "DISTANCE",
+
+                          "${distance.toStringAsFixed(1)} km",
+
+                          Colors.blue,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
