@@ -159,14 +159,7 @@ class _DashboardScreenState
                       ),
 
                       // PROFILE IMAGE
-                      const CircleAvatar(
-                        radius: 20,
-
-                        backgroundImage:
-                            NetworkImage(
-                          "https://i.pravatar.cc/150?img=3",
-                        ),
-                      ),
+                     
                     ],
                   ),
 
